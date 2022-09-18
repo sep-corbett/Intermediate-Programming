@@ -26,6 +26,7 @@ def strict_number(a_number:int) -> int:
 # a = [1, 2, 3, 4, 5]
 # for i, j in enumerate(range(3, 8)):
 #     print(a[i], i, j)
+# ---
 
 
 my_list =[]
