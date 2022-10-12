@@ -1,4 +1,4 @@
-spirits: cognac, white wine, red wine, sparkling wine, vodka, tequila, beer, brandy, gin, rum, whisky, passoa, kahlua, vanilla vodka, peach schnapps, cointreau
-mixers: milk, strawberry juice, pineapple juice, coke, lemonade, orange juice, soda, ginger ale, espresso, cranberry juice
-syrups: simple syrup, grenadine
-garnishes: strawberry, lemon, lime, mint
+spirits: vodka, tequila, gin, rum, kahlua, vanilla vodka, peach schnapps, cointreau, sparkling wine, whisky
+mixers: milk, pineapple juice, cola, orange juice, espresso, cranberry juice
+syrups: simple syrup, grenadine, lemon juice, lime juice, passion fruit liqueur
+garnishes: bitters, passion fruit
