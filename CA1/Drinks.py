@@ -1,26 +1,25 @@
 import random 
 
-# create dictionary of drinks from text file
-drinks_dict = {}
-menu = []
+class ParsedText:
+    def __init__(self, filename):
+        self.my_dict = {}
+        self.my_list = []
 
-with open('Cocktails.txt', 'r') as file:
-    for line in file:
-        line = line.strip()
-        drink, ingredients = line.split(': ')
-        ingredients = ingredients.split(', ')
-        drinks_dict[drink] = ingredients
-        menu.append(drink)
+        with open(filename, 'r') as file:
+            for line in file:
+                line = line.strip()
+                key, values = line.split(': ')
+                values = values.split(', ')
+                self.my_dict[key] = values
+                self.my_list.append(key)
+
+# create dictionary of drinks and ingredients, and list of drinks from text file
+parsed_cocktails = ParsedText('Cocktails.txt')
+cocktails_dict, menu = parsed_cocktails.my_dict, parsed_cocktails.my_list
 
 # create dictionary of ingredients by type
-ingredients_dict = {}
+ingredients_dict = ParsedText('Ingredients.txt').my_dict
 
-with open('Ingredients.txt', 'r') as file:
-    for line in file:
-        line = line.strip()
-        type, ingredients = line.split(': ')
-        ingredients = ingredients.split(', ')
-        ingredients_dict[type] = ingredients
 
 class Drink:
     def __init__(self, drink_name) -> None:
@@ -29,7 +28,7 @@ class Drink:
         except:
             self.name = drink_name.lower()
 
-        self.ingredients = drinks_dict[self.name]
+        self.ingredients = cocktails_dict[self.name]
         self.spirits = []
         self.mixers = []
         self.syrups = []
