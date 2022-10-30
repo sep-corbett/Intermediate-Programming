@@ -1,24 +1,26 @@
-import random 
+import random
 
-class ParsedText:
-    def __init__(self, filename):
-        self.my_dict = {}
-        self.my_list = []
 
-        with open(filename, 'r') as file:
-            for line in file:
-                line = line.strip()
-                key, values = line.split(': ')
-                values = values.split(', ')
-                self.my_dict[key] = values
-                self.my_list.append(key)
+def parse_file(filename):
+    return_dict = {}
 
-# create dictionary of drinks and ingredients, and list of drinks from text file
-parsed_cocktails = ParsedText('Cocktails.txt')
-cocktails_dict, menu = parsed_cocktails.my_dict, parsed_cocktails.my_list
+    with open(filename, 'r') as file:
+        for line in file:
+            line = line.strip()
+            key, values = line.split(': ')
+            values = values.split(', ')
+            return_dict[key] = values
+
+    return return_dict
+
+# create recipe dictionaries
+cocktails_dict = parse_file('Cocktails.txt')
+shots_dict = parse_file('Shots.txt')
 
 # create dictionary of ingredients by type
-ingredients_dict = ParsedText('Ingredients.txt').my_dict
+ingredients_dict = parse_file('Ingredients.txt')
+
+menu = list(cocktails_dict.keys()) + list(shots_dict.keys())
 
 
 class Drink:
@@ -28,7 +30,12 @@ class Drink:
         except:
             self.name = drink_name.lower()
 
-        self.ingredients = cocktails_dict[self.name]
+        try:
+            self.ingredients = cocktails_dict[self.name]
+        except:
+            self.ingredients = shots_dict[self.name]
+
+        
         self.spirits = []
         self.mixers = []
         self.syrups = []
@@ -94,8 +101,8 @@ class Order:
         self.drinks_list = []
         self.menu_length = len(menu)
         self.order_size = order_size
-        print('menu length:', self.menu_length)
-        
+        # print('menu length:', self.menu_length)
+
         for i in range(self.order_size):
             n = random.randint(0, self.menu_length - 1) 
             new_drink = Drink(menu[n])
@@ -107,9 +114,6 @@ class Order:
 # mydrink = Drink(1)
 # print(mydrink)
 
-# my_order = Order(4)
-# for drink in my_order.drinks_list:
-#     print(drink, '\n')
-
-for i in range(6):
-    print(Drink(i).guess_ingredients(), '\n')
+my_order = Order(4)
+for drink in my_order.drinks_list:
+    drink.guess_ingredients()
