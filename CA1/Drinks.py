@@ -1,7 +1,11 @@
 import random
-
+from typing import ClassVar
 
 def parse_file(filename):
+    '''
+    read information from file, split up by colons and commmas
+    eg drinkname: ingredient1, ingredient2, ingredient3...
+    '''
     return_dict = {}
 
     with open(filename, 'r') as file:
@@ -14,37 +18,45 @@ def parse_file(filename):
     return return_dict
 
 # create recipe dictionaries
-cocktails_dict = parse_file('Cocktails.txt')
-shots_dict = parse_file('Shots.txt')
+cocktails_recipes = parse_file('Cocktails.txt')
+shots_recipes = parse_file('Shots.txt')
 
 # create dictionary of ingredients by type
 ingredients_dict = parse_file('Ingredients.txt')
 
-menu = list(cocktails_dict.keys()) + list(shots_dict.keys())
+menu = list(cocktails_recipes.keys()) + list(shots_recipes.keys())
+
+def print_all_ingredients():
+    for key in ingredients_dict:
+
+        print(f'\n{key}: \t', ingredients_dict[key])
 
 
 class Drink:
-    def __init__(self, drink_name) -> None:
-        try:
-            self.name = menu[int(drink_name)]
-        except:
-            self.name = drink_name.lower()
+    __drink_name: ClassVar[str]
+    __drink_type: ClassVar[str]
+    __ingredients: ClassVar[list]
+    __spirits: ClassVar[list]
+    __mixers: ClassVar[list]
+    __syrups: ClassVar[list]
+    __garnishes: ClassVar[list]
 
-        try:
-            self.ingredients = cocktails_dict[self.name]
-        except:
-            self.ingredients = shots_dict[self.name]
 
+
+
+    def __init__(self, drink_name, drink_type, *args:str, **kwargs:str) -> None:
+        self.__drink_name = drink_name.lower()
         
-        self.spirits = []
-        self.mixers = []
-        self.syrups = []
-        self.garnishes = []
+
+        if drink_type == 'cocktail':
+            self.__ingredients = cocktails_recipes[self.drink_name]
+        elif drink_type == 'shot':
+            self.__ingredients = shots_recipes[self.drink_name]
 
         self.__categorise_ingredients()
 
     def __categorise_ingredients(self):
-        for item in self.ingredients:
+        for item in self.__ingredients:
             if item in ingredients_dict['spirits']:
                 self.spirits.append(item)
             elif item in ingredients_dict['mixers']:
@@ -57,7 +69,7 @@ class Drink:
                 print(item, 'not found in ingredients file yet')
 
     def __str__(self):
-        output = self.name
+        output = self.__drink_name
         output += f'\nspirits: {[item for item in self.spirits]}'
         output += f'\nmixers: {[item for item in self.mixers]}'
         output += f'\nsyrups: {[item for item in self.syrups]}'
@@ -87,6 +99,9 @@ class Drink:
             self.garnishes.remove(guess)
         else:
             print(f'{self.name} does not contain {guess}')
+            return
+        
+        print("Correct!", end='')
 
     def are_lists_empty(self):
         lists = [self.spirits, self.mixers, self.syrups, self.garnishes]
@@ -95,7 +110,34 @@ class Drink:
                 return False
         return True
 
+class Cocktail(Drink):
+    def __init__(self, drink_name, drink_type, *args: str, **kwargs: str) -> None:
+        super().__init__(drink_name, drink_type, *args, **kwargs)
 
+    def shake(self):
+        print('The customer was impressed by your shaking skills, bonus points!')
+
+    def add_ice(self):
+        print('Ice added successfully, bonus points!')
+
+
+
+class Shot(Drink):
+    def __init__(self, drink_name, drink_type, *args: str, **kwargs: str) -> None:
+        super().__init__(drink_name, drink_type, *args, **kwargs)
+
+    def shake(self):
+        print("You can't shake a shot!!! Booze has gone everywhere! Minus points")
+
+    def add_ice(self):
+        print("Customer has choked on your ice cube, minus points")
+
+    
+
+
+
+
+'''
 class Order:
     def __init__(self, order_size) -> None:
         self.drinks_list = []
@@ -108,12 +150,8 @@ class Order:
             new_drink = Drink(menu[n])
             self.drinks_list.append(new_drink)
 
-        
-        
-
-# mydrink = Drink(1)
-# print(mydrink)
 
 my_order = Order(4)
 for drink in my_order.drinks_list:
     drink.guess_ingredients()
+'''
