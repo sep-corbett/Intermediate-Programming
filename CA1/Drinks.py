@@ -1,3 +1,5 @@
+# 121311053 Sarah Corbett
+
 import random
 from typing import ClassVar
 
@@ -21,9 +23,6 @@ def parse_file(filename):
 cocktails_recipes = parse_file('Cocktails.txt')
 shots_recipes = parse_file('Shots.txt')
 
-
-
-
 class Drink:
     drink_name: ClassVar[str]
     _ingredients: ClassVar[list] # hidden from the user
@@ -37,11 +36,7 @@ class Drink:
 
     def __init__(self, drink_name, *args:str, **kwargs:str) -> None:
         self.drink_name = drink_name
-        if len(args[0]) > 0:
-            self._ingredients = args[0]
-        else:
-            # raise error
-            return
+        self._ingredients = args[0]
         
         self.complete = False
         self.current_rating = 0
@@ -56,6 +51,9 @@ class Drink:
         if Drink._hint_count <= 0:
             print('You cannot ask the customer any more questions as they are too sloshed.')
             return
+        if len(self._ingredients) == 0:
+            print('No hint needed, this drink is complete!')
+            return 
         hint = self._ingredients[0]
         front_jumbled = 'b' + hint[1:]
         end_jumbled = hint[:-1] + 'y'
@@ -164,15 +162,12 @@ class Order:
         self.order_size = order_size
         self.current_score = 0
 
-        self.generate_order()
+        self.__generate_order()
 
     def get_drinks_list(self):
         return [str(drink) for drink in self.__drinks_list]
 
-    def append_to_drinks_list(self, drink: Drink):
-        self.__drinks_list.append(drink)
-
-    def generate_order(self):
+    def __generate_order(self):
         for i in range(self.order_size):
             n = random.randint(0, len(self.menu) - 1) 
             new_drink = self.menu[n]
@@ -182,9 +177,11 @@ class Order:
                 self.__drinks_list.append(Shot(new_drink))
 
     def prepare_order(self):
+        print('Welcome to your first shift at the bar! Make sure to read your instructions in the ReadMe')
+        
+
         for drink in self.__drinks_list:
-
-
+            print('Your order is:', drink.drink_name)
             while not drink.complete:
                 a = input('>>> ')
                 try:
@@ -206,16 +203,5 @@ class Order:
             else:
                 print('The customer loves your drink and is emailing their mother about it already')
 
-
-
-            
-
-
-my_order = Order(4)
-'''
-print(my_order.get_drinks_list())
-my_order.append_to_drinks_list(Shot('baby guinness'))
-print(my_order.get_drinks_list())
-'''
-# my_order.prepare_order()
-
+my_order = Order(1)
+my_order.prepare_order()

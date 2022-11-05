@@ -1,0 +1,33 @@
+# Welcome to the bar! 
+## Here's some important information to read before your first shift!
+
+Generating and preparing an order should be done as follows, with n being the number of drinks in the order:
+
+```
+my_order = Order(n)
+my_order.prepare()
+``` 
+
+From there, you will be given the name of your first drink, and a terminal will appear.
+Into this terminal, you can write python code that will be executed.
+
+To add an ingredient to a drink (for example vodka):
+`>>> drink.add('vodka')`
+
+Here are some additional operations you can you to potentially increase/decrease the quality of your drink:
+```
+>>> drink.add_ice()
+>>> drink.shake()
+>>> drink.add_whipped_cream()
+```
+
+When you feel the drink is ready, run:
+`>>> drink.serve()`
+
+There will be penalties for missing ingredients. 
+You can ask the customer for a hint by entering any inputwith the word 'hint' in it.
+`>>> please give me a hint pretty please`
+
+
+
+
